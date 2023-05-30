@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Register = ({ onRouteChange, loadUser }) => {
+const Register = ({ onRouteChange, loadUser, hostUrl }) => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -18,7 +18,7 @@ const Register = ({ onRouteChange, loadUser }) => {
     };
 
     const onSubmitSignIn = () => {
-        fetch(`${process.env.HOST_URL}/register`, {
+        fetch(`${hostUrl}/register`, {
             method: "post",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

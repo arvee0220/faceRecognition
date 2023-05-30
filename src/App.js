@@ -26,6 +26,8 @@ const initialState = {
 };
 
 const App = () => {
+    const HOST_URL = "https://face-recognition-api-ywfi.onrender.com";
+
     const [state, setState] = useState(initialState);
 
     const loadUser = (data) => {
@@ -68,7 +70,7 @@ const App = () => {
             ...prevState,
             imageUrl: state.input,
         }));
-        fetch(`${process.env.HOST_URL}/imageurl`, {
+        fetch(`${HOST_URL}/imageurl`, {
             method: "post",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -78,7 +80,7 @@ const App = () => {
             .then((response) => response.json())
             .then((response) => {
                 if (response) {
-                    fetch(`${process.env.HOST_URL}/image`, {
+                    fetch(`${HOST_URL}/image`, {
                         method: "put",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
@@ -125,9 +127,17 @@ const App = () => {
                     <FaceRecognition box={box} imageUrl={imageUrl} />
                 </div>
             ) : route === "signin" ? (
-                <Signin loadUser={loadUser} onRouteChange={onRouteChange} />
+                <Signin
+                    hostUrl={HOST_URL}
+                    loadUser={loadUser}
+                    onRouteChange={onRouteChange}
+                />
             ) : (
-                <Register loadUser={loadUser} onRouteChange={onRouteChange} />
+                <Register
+                    hostUrl={HOST_URL}
+                    loadUser={loadUser}
+                    onRouteChange={onRouteChange}
+                />
             )}
         </div>
     );
