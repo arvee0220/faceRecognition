@@ -1,32 +1,32 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 // import Particles from 'react-particles-js';
-import ParticlesBg from "particles-bg";
-import FaceRecognition from "./components/FaceRecognition/FaceRecognition.js";
-import Navigation from "./components/Navigation/Navigation.js";
-import Signin from "./components/Signin/Signin.js";
-import Register from "./components/Register/Register.js";
-import Logo from "./components/Logo/Logo.js";
-import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm.js";
-import Rank from "./components/Rank/Rank.js";
-import "./App.css";
+import ParticlesBg from 'particles-bg';
+import FaceRecognition from './components/FaceRecognition/FaceRecognition.js';
+import Navigation from './components/Navigation/Navigation.js';
+import Signin from './components/Signin/Signin.js';
+import Register from './components/Register/Register.js';
+import Logo from './components/Logo/Logo.js';
+import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm.js';
+import Rank from './components/Rank/Rank.js';
+import './App.css';
 
 const initialState = {
-    input: "",
-    imageUrl: "",
+    input: '',
+    imageUrl: '',
     box: {},
-    route: "signin",
+    route: 'signin',
     isSignedIn: false,
     user: {
-        id: "",
-        name: "",
-        email: "",
+        id: '',
+        name: '',
+        email: '',
         entries: 0,
-        joined: "",
+        joined: '',
     },
 };
 
 const App = () => {
-    const HOST_URL = "https://face-recognition-api-ywfi.onrender.com";
+    const HOST_URL = 'https://face-recognition-api-ywfi.onrender.com';
 
     const [state, setState] = useState(initialState);
 
@@ -44,9 +44,8 @@ const App = () => {
     };
 
     const calculateFaceLocation = (data) => {
-        const clarifaiFace =
-            data.outputs[0].data.regions[0].region_info.bounding_box;
-        const image = document.getElementById("inputimage");
+        const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+        const image = document.getElementById('inputimage');
         const width = Number(image.width);
         const height = Number(image.height);
         return {
@@ -70,9 +69,9 @@ const App = () => {
             ...prevState,
             imageUrl: state.input,
         }));
-        fetch(`${HOST_URL}/imageurl`, {
-            method: "post",
-            headers: { "Content-Type": "application/json" },
+        fetch(`${HOST_URL}/imageUrl`, {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 input: state.input,
             }),
@@ -81,8 +80,8 @@ const App = () => {
             .then((response) => {
                 if (response) {
                     fetch(`${HOST_URL}/image`, {
-                        method: "put",
-                        headers: { "Content-Type": "application/json" },
+                        method: 'put',
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             id: state.user.id,
                         }),
@@ -102,9 +101,9 @@ const App = () => {
     };
 
     const onRouteChange = (route) => {
-        if (route === "signout") {
+        if (route === 'signout') {
             setState(initialState);
-        } else if (route === "home") {
+        } else if (route === 'home') {
             setState((prevState) => ({ ...prevState, isSignedIn: true }));
         }
         setState((prevState) => ({ ...prevState, route: route }));
@@ -113,31 +112,20 @@ const App = () => {
     const { isSignedIn, imageUrl, route, box } = state;
 
     return (
-        <div className="App">
-            <ParticlesBg color="FFFFFF" type="cobweb" bg={true} />
+        <div className='App'>
+            <ParticlesBg color='FFFFFF' type='cobweb' bg={true} />
             <Navigation isSignedIn={isSignedIn} onRouteChange={onRouteChange} />
-            {route === "home" ? (
+            {route === 'home' ? (
                 <div>
                     <Logo />
                     <Rank name={state.user.name} entries={state.user.entries} />
-                    <ImageLinkForm
-                        onInputChange={onInputChange}
-                        onButtonSubmit={onButtonSubmit}
-                    />
+                    <ImageLinkForm onInputChange={onInputChange} onButtonSubmit={onButtonSubmit} />
                     <FaceRecognition box={box} imageUrl={imageUrl} />
                 </div>
-            ) : route === "signin" ? (
-                <Signin
-                    hostUrl={HOST_URL}
-                    loadUser={loadUser}
-                    onRouteChange={onRouteChange}
-                />
+            ) : route === 'signin' ? (
+                <Signin hostUrl={HOST_URL} loadUser={loadUser} onRouteChange={onRouteChange} />
             ) : (
-                <Register
-                    hostUrl={HOST_URL}
-                    loadUser={loadUser}
-                    onRouteChange={onRouteChange}
-                />
+                <Register hostUrl={HOST_URL} loadUser={loadUser} onRouteChange={onRouteChange} />
             )}
         </div>
     );
